@@ -49,7 +49,7 @@ face_mesh = mp_face_mesh.FaceMesh(
 pygame.mixer.init()
 
 # Load your music file — put any .mp3 in the same folder
-MUSIC_FILE = "BABYMETAL - Headbanger.mp3"
+MUSIC_FILE = "BABYMETAL.mp3"
 if os.path.exists(MUSIC_FILE):
     pygame.mixer.music.load(MUSIC_FILE)
     print(f"Loaded: {MUSIC_FILE}")
