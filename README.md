@@ -6,25 +6,22 @@ The project's goal is to enable Python beginners to work with hardware without i
 
 ## What it does
 
-[One sentence describing what the project does from the user's perspective.]
+When you look up it starts music and when you look down it stops, when you look right again and not down it resumes music.
+
 
 ## Hardware concept
 
-[What hardware concept this mirrors and why it matters. 1-2 sentences.]
+This project mirrors a tilt sensor triggering a relay, where change in head position acts as a switch to activate the music player. 
+The threshold is an additional concept that acts as a limit to detect nose and iris movement change with the use of webcam.
 
-## Screenshot / GIF
-
-[Embed a screenshot or GIF of the output. A 5-second GIF is ideal.]
-
-<!-- Tip: Use a tool like peek (Linux), Gifox (Mac), or ScreenToGif (Windows) -->
 
 ## What I would do differently
 
-[One sentence on what you would change if you rebuilt it.]
+I think putting a face shape case might have been good. From the distance it works differently than from near distance.
 
 ## Run it
 
 ```bash
-python main.py
+python day01.py
 ```
 
