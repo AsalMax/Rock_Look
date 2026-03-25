@@ -7,15 +7,6 @@ Trigger rock music playback when your gaze drops.
 Hardware concept: Sensor → Threshold → Actuator
 This mirrors a tilt sensor triggering a relay.
 
-YOUR TASK:
-1. Set your gaze threshold (line marked TODO #1)
-2. Add the music trigger logic (line marked TODO #2)
-3. Run it: python day01_starter.py
-4. Push to GitHub before midnight
-
-SETUP:
-- Place any .mp3 file in the same folder and name it "music.mp3"
-  (or change the filename on line 30)
 """
 
 import cv2
@@ -25,7 +16,7 @@ import sys
 import os
 
 # ============================================================
-# SETUP — you don't need to change this section
+# SETUP 
 # ============================================================
 
 # Initialize webcam
@@ -49,7 +40,7 @@ face_mesh = mp_face_mesh.FaceMesh(
 pygame.mixer.init()
 
 # Load your music file — put any .mp3 in the same folder
-MUSIC_FILE = "BABYMETAL - Headbanger.mp3"
+MUSIC_FILE = "BABYMETAL.mp3"
 if os.path.exists(MUSIC_FILE):
     pygame.mixer.music.load(MUSIC_FILE)
     print(f"Loaded: {MUSIC_FILE}")
@@ -71,16 +62,8 @@ is_playing = False
 # ============================================================
 # TODO #1: Set your gaze threshold
 # ============================================================
-# This is the key hardware concept: THRESHOLD
-# When the iris y-position is far enough BELOW the nose,
-# we consider the person "looking down"
-#
-# Higher number = need to look further down to trigger
-# Lower number = triggers more easily
-# Start with 0.02 and adjust until it feels right
-#
-GAZE_THRESHOLD = 0.02  # <-- Adjust this value
 
+GAZE_THRESHOLD = -0.138  # <-- Adjust this value
 
 # ============================================================
 # MAIN LOOP — Sensor → Process → Output
@@ -121,8 +104,8 @@ while True:
 
         # Display the gaze value on screen
         looking_down = gaze_offset > GAZE_THRESHOLD
-        status = "LOOKING DOWN" if looking_down else "LOOKING UP"
-        color = (0, 0, 255) if looking_down else (0, 255, 0)
+        status = "LOOKING UP" if looking_down else "LOOKING DOWN"
+        color = (0, 255, 0) if looking_down else (0, 0, 255)
 
         cv2.putText(frame, f"Gaze offset: {gaze_offset:.4f}", (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
@@ -132,23 +115,23 @@ while True:
                     cv2.FONT_HERSHEY_SIMPLEX, 1.0, color, 3)
 
         # ==================================================
-        # TODO #2: Add your music trigger logic here
+        # TODO #2: Music Trigger Logic
         # ==================================================
-        # The variable 'looking_down' is True when gaze is
-        # below the threshold, False when above.
-        #
-        # Use pygame.mixer.music.play() to start music
-        # Use pygame.mixer.music.pause() to pause
-        # Use pygame.mixer.music.unpause() to resume
-        #
-        # The variable 'is_playing' tracks whether music is
-        # currently playing. Update it when you start/pause.
-        #
-        # HINT: You need an if/else that:
-        # - Starts or resumes music when looking_down is True
-        #   and music is NOT already playing
-        # - Pauses music when looking_down is False
-        #   and music IS playing
+        if looking_down:
+            if not is_playing:
+                if pygame.mixer.music.get_pos() == -1:
+                    pygame.mixer.music.play(-1)
+                else:
+                    pygame.mixer.music.unpause()
+                
+                is_playing = True
+                print("▶ Music playing")
+        else:
+            if is_playing:
+                pygame.mixer.music.pause()
+                is_playing = False
+                print("⏸ Music paused")
+
         if looking_down and not is_playing:
             if os.path.exists(MUSIC_FILE):
                 if pygame.mixer.music.get_pos() == -1:
